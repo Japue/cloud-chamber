@@ -11,6 +11,7 @@ Program for detecting types of particles in a cloud chamber
 - Function that greyscales all Pixels in that vector
 
 #### Detecting clusters
+- Look into low-shot/zero-shot learning instead of K-means for this
 - Particles will be clusters of white, we need a way to detect what is a particle and what is not: idk yet, maybe hierachical clustering would work, this would act on all Pixels
 - Use K-means clustering to group all clusters into a group that represents which particle it is, this would act on the different clusters made in the step before
 - Output useful clusters, what particle it is and what the position of the for example the centre of mass is so that we can find it
