@@ -17,6 +17,7 @@ Program for detecting types of particles in a cloud chamber
 - Make some kind of thing that puts the prediction on the actual image instead of outputting it to terminal
 
 #### Calibration
+- Look into Principal component analysis for this
 - Write a function that lowers the resolution of our image
 - Write a function that can find the optimum of resolution, not too low and not too high to preserve memory
 - Write a function that calibrates our vector of pixels by looking for a signal (like a bright colored obvious spot in the image) so that we only take the inside of the cloud chamber into our grid by throwing out the outside pixels
