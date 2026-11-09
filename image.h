@@ -4,6 +4,13 @@
 struct Pixel {
 	unsigned char r, g, b, a;
 
+	Pixel() {
+		r = 0;
+		g = 0;
+		b = 0;
+		a = 0;
+	}
+
 	Pixel(int r_, int g_, int b_, int a_) {
 		r = r_;
 		g = g_;
