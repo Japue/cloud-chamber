@@ -1,6 +1,5 @@
 # cloud-chamber
 Program for detecting types of particles in a cloud chamber
-aaaaa
 
 ## Todo's
 ### 1. Prediction for 1 image
