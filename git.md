@@ -3,6 +3,8 @@
 Install git first
 In the .gitignore file you can add files that are local to your system, e.g. a build folder, these files will not be commited to your repo and will be invisible to git
 
+To get a github repo on your local machine do git clone link, and fill the link with the link of the github repo. Then if you have admin access you can also make changes in the github if you don't your changes will stay local or you will have to make your own github repo but it will be separate of the actual original github repo
+
 ## Change workflow
 
 - git status: gives the current status of the repo
