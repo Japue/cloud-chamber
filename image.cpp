@@ -16,7 +16,7 @@ Image load_image(const std::string& path) {
 	//create the pixel vector
 	std::vector<Pixel> pixels(w * h);
 	for (int i = 0; i < w * h; i++) {
-		pixels[i] = Pixel(data[i * 4], data[i * 4 + 1], data[i * 4 + 2], data[i * 4 + 3]);
+		pixels[i] = Pixel(static_cast<int>(data[i * 4]), static_cast<int>(data[i * 4 + 1]), static_cast<int>(data[i * 4 + 2]), static_cast<int>(data[i * 4 + 3]));
 	}
 	stbi_image_free(data);
 

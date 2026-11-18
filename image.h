@@ -11,13 +11,6 @@ struct Pixel {
 		a = 0;
 	}
 
-	Pixel(int g_) {
-		r = 0;
-		g = g_;
-		b = 0;
-		a = 0;
-	}
-
 	Pixel(int r_, int g_, int b_, int a_) {
 		r = r_;
 		g = g_;
@@ -30,6 +23,7 @@ struct Image {
 	int width;
 	int height;
 	std::vector<Pixel> pixels;
+	std::vector<Pixel> int_pixels;
 
 	Image(int width_, int height_, std::vector<Pixel> pixels_) {
 		width = width_;
