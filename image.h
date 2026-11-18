@@ -11,6 +11,13 @@ struct Pixel {
 		a = 0;
 	}
 
+	Pixel(int g_) {
+		r = 0;
+		g = g_;
+		b = 0;
+		a = 0;
+	}
+
 	Pixel(int r_, int g_, int b_, int a_) {
 		r = r_;
 		g = g_;
