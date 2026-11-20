@@ -5,15 +5,15 @@
 
 void draw_image_sfml(sf::RenderWindow& window, const Image& image) {
 	// calculate a scaling to have the image cover most of the initial sfml window
-	const float scale = 1
+	const float scale = 1;
 	for (int y = 0; y < image.height; y++) {
 		for (int x = 0; x < image.width; x++) {
-			vec_index = x + y * image.width;
+			int vec_index = x + y * image.width;
 			Pixel pixel = image.pixels.at(vec_index);
 
 			sf::RectangleShape square(scale, scale);
 			square.setPosition({static_cast<float>(x) + scale, static_cast<float>(y) + scale});
-			square.setFillColor(sf::Color(pixel[0], pixel[1], pixel[2]))
+			square.setFillColor(sf::Color(pixel.r, pixel.g, pixel.b))
 			window.draw(square);
 		}
 	}
