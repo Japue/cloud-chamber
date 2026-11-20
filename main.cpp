@@ -17,6 +17,7 @@ int main(int argc, char* argv[]) {
 
 	std::vector<sf::Vector2i> anchors = calibrate_setup(image);
 	calibrate(image, anchors);
+
 	
 	stbi_write_png("new_image", image.width, image.height, 4, image.pixels.data(), image.width * 4);
 }

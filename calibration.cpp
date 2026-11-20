@@ -1,6 +1,7 @@
 #include "calibration.h"
 #include <SFML/Graphics.hpp>
 #include "image.h"
+#include <iostream>
 
 
 void draw_image_sfml(sf::RenderWindow& window, const Image& image) {
@@ -24,10 +25,12 @@ void draw_image_sfml(sf::RenderWindow& window, const Image& image) {
 std::vector<sf::Vector2i> calibrate_setup(const Image& image) {
 	//window setup
 	sf::RenderWindow window(sf::VideoMode::getDesktopMode(),  "Calibration");
+	window.requestFocus();
 	sf::View view = window.getDefaultView();
 
 	bool is_dragging = false;
 	sf::Vector2i last_mouse_pos = sf::Mouse::getPosition(window);
+	sf::Vector2f last_mouse_pos_scaled = window.mapPixelToCoords(last_mouse_pos);
 	sf::Vector2i first_anchor = {0, 0};
 	sf::Vector2i second_anchor = {image.width - 1, image.height - 1};
 
@@ -68,13 +71,17 @@ std::vector<sf::Vector2i> calibrate_setup(const Image& image) {
 
 			if (const auto* keyPressed = event -> getIf<sf::Event::KeyPressed>()) {
 				if (keyPressed->code == sf::Keyboard::Key::S) {
-					first_anchor = last_mouse_pos;
+					last_mouse_pos_scaled = window.mapPixelToCoords(last_mouse_pos);
+					first_anchor = {static_cast<int>(last_mouse_pos_scaled.x), static_cast<int>(last_mouse_pos_scaled.y)};
+					std::cout << "Set first anchor to (" << first_anchor.x << ", " << first_anchor.y << ")" << "\n";
 				}
 			}
 
 			if (const auto* keyPressed = event -> getIf<sf::Event::KeyPressed>()) {
 				if (keyPressed->code == sf::Keyboard::Key::E) {
-					second_anchor = last_mouse_pos;
+					last_mouse_pos_scaled = window.mapPixelToCoords(last_mouse_pos);
+					second_anchor = {static_cast<int>(last_mouse_pos_scaled.x), static_cast<int>(last_mouse_pos_scaled.y)};
+					std::cout << "Set second anchor to (" << second_anchor.x << ", " << second_anchor.y << ")" << "\n";
 				}
 			}
 		}
@@ -106,11 +113,19 @@ std::vector<sf::Vector2i> calibrate_setup(const Image& image) {
 }
 
 
-void calibrate(Image& image, std::vector<sf::Vector2i> anchors) {
-	int vec_index_0 = anchors[0].x + anchors[0].y * image.height;
-	int vec_index_1 = anchors[1].x + anchors[1].y * image.height;
-	image.pixels = std::vector<Pixel>(image.pixels.begin() + vec_index_0, image.pixels.begin() + vec_index_1 + 1);
+void calibrate(Image& image, const std::vector<sf::Vector2i>& anchors) {
+	int n_width = anchors[1].x - anchors[0].x + 1;
+	int n_height = anchors[1].y - anchors[0].y + 1;
 
-	image.width = anchors[1].x - anchors[0].x;
-	image.height = anchors[1].y - anchors[0].y;
+	std::vector<Pixel> new_pixels = {};
+	new_pixels.reserve(n_width * n_height);
+	for (int y = anchors[0].y; y <= anchors[1].y; y++) {
+		for (int x = anchors[0].x; x <= anchors[1].x; x++) {
+			new_pixels.push_back(image.pixels.at(x + y * image.width));
+		}
+	}
+
+	image.pixels = new_pixels;
+	image.width = n_width;
+	image.height = n_height;
 }
