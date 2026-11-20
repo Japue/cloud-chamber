@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
 	Image image = load_image(path);
 	std::cout << "Image loaded: w = " << image.width << ", h = " << image.height << "\n";
 
-	sf::Vector<sf::Vector2i> anchors = calibrate_setup(image);
+	std::vector<sf::Vector2i> anchors = calibrate_setup(image);
 	calibrate(image, anchors);
 	
 	stbi_write_png("new_image", image.width, image.height, 4, image.pixels.data(), image.width * 4);

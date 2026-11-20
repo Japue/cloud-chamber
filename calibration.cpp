@@ -11,9 +11,9 @@ void draw_image_sfml(sf::RenderWindow& window, const Image& image) {
 			int vec_index = x + y * image.width;
 			Pixel pixel = image.pixels.at(vec_index);
 
-			sf::RectangleShape square(scale, scale);
+			sf::RectangleShape square({scale, scale});
 			square.setPosition({static_cast<float>(x) + scale, static_cast<float>(y) + scale});
-			square.setFillColor(sf::Color(pixel.r, pixel.g, pixel.b))
+			square.setFillColor(sf::Color(pixel.r, pixel.g, pixel.b));
 			window.draw(square);
 		}
 	}
@@ -102,15 +102,15 @@ std::vector<sf::Vector2i> calibrate_setup(const Image& image) {
 
 		window.display();
 	}
-	return std::vector<sf::Vector2i>(first_anchor, second_anchor);
+	return std::vector<sf::Vector2i>{first_anchor, second_anchor};
 }
 
 
 void calibrate(Image& image, std::vector<sf::Vector2i> anchors) {
-	vec_index_0 = anchor[0].x + anchor[0].y * image.height;
-	vec_index_1 = anchor[1].x + anchor[1].y * image.height;
-	image.pixels = (image.pixels.begin() + vec_index_0, image.pixels.begin() + vec_index_1 + 1);
+	int vec_index_0 = anchors[0].x + anchors[0].y * image.height;
+	int vec_index_1 = anchors[1].x + anchors[1].y * image.height;
+	image.pixels = std::vector<Pixel>(image.pixels.begin() + vec_index_0, image.pixels.begin() + vec_index_1 + 1);
 
-	image.width = anchor[1].x - anchor[0].x;
-	image.height = anchor[1].y - anchor[0].y;
+	image.width = anchors[1].x - anchors[0].x;
+	image.height = anchors[1].y - anchors[0].y;
 }
