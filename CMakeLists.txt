@@ -6,12 +6,29 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(SFML_DIR "${CMAKE_CURRENT_SOURCE_DIR}/packages/SFML-3.1.0/lib/cmake/SFML")
-find_package(SFML 3 REQUIRED COMPONENTS Graphics)
+#SFML
+set(BUILD_SHARED_LIBS ON)
+set(SFML_BUILD_AUDIO OFF)
+set(SFML_BUILD_NETWORK OFF)
 
-add_executable(main.exe main.cpp
+include(FetchContent)
+FetchContent_Declare(SFML
+    GIT_REPOSITORY https://github.com/SFML/SFML.git
+    GIT_TAG 3.1.0
+    GIT_SHALLOW ON
+    EXCLUDE_FROM_ALL
+    SYSTEM)
+FetchContent_MakeAvailable(SFML)
+
+add_executable(main main.cpp
 	image.cpp
 	calibration.cpp
 )
 
-target_link_libraries(main.exe PRIVATE SFML::Graphics)
+target_link_libraries(main PRIVATE SFML::Graphics)
+
+if(WIN32)
+	add_custom_command(TARGET main POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:main> $<TARGET_FILE_DIR:main>
+		COMMAND_EXPAND_LISTS)
+endif()
