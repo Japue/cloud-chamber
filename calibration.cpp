@@ -1,24 +1,9 @@
 #include "calibration.h"
 #include <SFML/Graphics.hpp>
 #include "image.h"
+//needed for the uints
+#include <cstdint>
 #include <iostream>
-
-
-void draw_image_sfml(sf::RenderWindow& window, const Image& image) {
-	// calculate a scaling to have the image cover most of the initial sfml window
-	const float scale = 1;
-	for (int y = 0; y < image.height; y++) {
-		for (int x = 0; x < image.width; x++) {
-			int vec_index = x + y * image.width;
-			Pixel pixel = image.pixels.at(vec_index);
-
-			sf::RectangleShape square({scale, scale});
-			square.setPosition({static_cast<float>(x) + scale, static_cast<float>(y) + scale});
-			square.setFillColor(sf::Color(pixel.r, pixel.g, pixel.b));
-			window.draw(square);
-		}
-	}
-}
 
 
 //function that sets up the calibration coordinates for using after, this should be called every independent session once
@@ -26,6 +11,7 @@ std::vector<sf::Vector2i> calibrate_setup(const Image& image) {
 	//window setup
 	sf::RenderWindow window(sf::VideoMode::getDesktopMode(),  "Calibration");
 	window.requestFocus();
+	window.setFramerateLimit(60);
 	sf::View view = window.getDefaultView();
 
 	bool is_dragging = false;
@@ -33,6 +19,11 @@ std::vector<sf::Vector2i> calibrate_setup(const Image& image) {
 	sf::Vector2f last_mouse_pos_scaled = window.mapPixelToCoords(last_mouse_pos);
 	sf::Vector2i first_anchor = {0, 0};
 	sf::Vector2i second_anchor = {image.width - 1, image.height - 1};
+
+	//load the image into a sprite
+	sf::Texture texture(sf::Vector2u{static_cast<unsigned>(image.width), static_cast<unsigned>(image.height)});
+	texture.update(reinterpret_cast<const std::uint8_t*>(image.pixels.data()));
+	sf::Sprite sprite(texture);
 
 	//gameloop
 	while (window.isOpen()) {
@@ -104,7 +95,7 @@ std::vector<sf::Vector2i> calibrate_setup(const Image& image) {
 		window.setView(view);
 
 		//drawing
-		draw_image_sfml(window, image);
+		window.draw(sprite);
 		//
 
 		window.display();
