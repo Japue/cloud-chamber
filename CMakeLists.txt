@@ -1,9 +1,16 @@
 cmake_minimum_required(VERSION 3.10)
 project(cloud_chamber)
 
+# personal command
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# OpenCV
+find_package( OpenCV REQUIRED )
+include_directories( ${OpenCV_INCLUDE_DIRS} )
 
 add_executable(main main.cpp
 	image.cpp
 	calibration.cpp
 )
+
+target_link_libraries( main ${OpenCV_LIBS} )
