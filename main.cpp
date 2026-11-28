@@ -9,7 +9,7 @@ int main(int argc, char* argv[]) {
 	// calibration
 	std::optional<cv::Rect> rect = calibrate();
 	if (!rect) {
-		std::cerr << "calibration failed";
+		std::cerr << "calibration failed \n";
 		return -1;
 	}
 	cv::Range row_range(rect -> y, rect -> y + rect -> height);
@@ -31,9 +31,9 @@ int main(int argc, char* argv[]) {
 	while(k != 'q') {
 		cap.read(frame);
 		if (frame.empty()) {
-			std::cerr << "blank frame grabbed\n";
+			std::cerr << "blank frame grabbed \n";
 			cv::destroyWindow("Feed");
-			return {};
+			return -1;
     	}
 
 		cv::Mat cropped = frame(row_range, col_range);
